@@ -76,6 +76,8 @@ namespace NMouseClicker
 
 		private void Playback()
 		{
+			UnsubscribeFromEvents();
+
 			var script = ScriptTextBox.Text;
 			var lines = script.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 			foreach (var line in lines)
@@ -91,6 +93,8 @@ namespace NMouseClicker
 					m_actions[action](actionArgs);
 				}
 			}
+
+			SubscribeToEvents();
 		}
 
 		private void PlayHotkey_Pressed()
