@@ -8,8 +8,10 @@ namespace NMouseClicker
 {
 	internal partial class MainWindow : Form
 	{
-		private IKeyboardMouseEvents m_hook;
 		private readonly List<KeyFilter> m_filters = new List<KeyFilter>();
+
+		private IKeyboardMouseEvents m_hook;
+		private DateTime? m_lastEventTime;
 		private bool m_isRecording;
 		private bool m_isPlaying;
 
@@ -34,7 +36,7 @@ namespace NMouseClicker
 		public void UnsubscribeFromEvents()
 		{
 			m_hook.KeyDown -= Hook_KeyDown;
-			m_hook.MouseClick -= Hook_MouseDown;
+			m_hook.MouseDown -= Hook_MouseDown;
 			m_hook.Dispose();
 		}
 
@@ -58,6 +60,10 @@ namespace NMouseClicker
 		private void RecordHotkey_Pressed()
 		{
 			m_isRecording = !m_isRecording;
+			if (!m_isRecording)
+			{
+				m_lastEventTime = null;
+			}
 			UpdateWindowTitle();
 		}
 
@@ -72,7 +78,19 @@ namespace NMouseClicker
 		private void Hook_MouseDown(object sender, MouseEventArgs e)
 		{
 			if (!m_isRecording) return;
-			Log($"MouseDown: {e.Button}, X:{e.X}, Y:{e.Y}");
+
+			var now = DateTime.UtcNow;
+			if (!m_lastEventTime.HasValue)
+			{
+				m_lastEventTime = now;
+			}
+			else
+			{
+				var delta = now - m_lastEventTime.Value;
+				m_lastEventTime = now;
+				Log($"Wait {(int)delta.TotalMilliseconds}");
+			}
+			Log($"{e.Button} {e.X} {e.Y}");
 		}
 
 		private void MainWindow_Load(object sender, EventArgs eventArgs)
