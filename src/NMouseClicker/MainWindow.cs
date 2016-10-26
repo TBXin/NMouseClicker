@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using Gma.System.MouseKeyHook;
 
@@ -43,7 +45,12 @@ namespace NMouseClicker
 		private void Log(string format, params object[] args)
 		{
 			var str = string.Format(CultureInfo.InvariantCulture, format, args);
-			textBox1.AppendText(str + Environment.NewLine);
+			Log(str);
+		}
+
+		private void Log(string message)
+		{
+			ScriptTextBox.AppendText(message + Environment.NewLine);
 		}
 
 		private void UpdateWindowTitle()
@@ -51,16 +58,57 @@ namespace NMouseClicker
 			Text = $@"NMouseClicker, Recording: {m_isRecording}, Playing: {m_isPlaying}";
 		}
 
+		private readonly IDictionary<string, Action<string[]>> m_actions = new Dictionary<string, Action<string[]>>(StringComparer.OrdinalIgnoreCase)
+		{
+			["wait"] = args =>
+			{
+				var interval = int.Parse(args[0]);
+				Thread.Sleep(interval);
+			},
+			["Left"] = args =>
+			{
+				var x = int.Parse(args[0]);
+				var y = int.Parse(args[1]);
+
+				MouseEventGenerator.LClick(x, y);
+			}
+		};
+
+		private void Playback()
+		{
+			var script = ScriptTextBox.Text;
+			var lines = script.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+			foreach (var line in lines)
+			{
+				var parts = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+				if (parts.Length == 0) return;
+
+				var action = parts[0];
+				var actionArgs = parts.Skip(1).ToArray();
+
+				if (m_actions.ContainsKey(action))
+				{
+					m_actions[action](actionArgs);
+				}
+			}
+		}
+
 		private void PlayHotkey_Pressed()
 		{
 			m_isPlaying = !m_isPlaying;
 			UpdateWindowTitle();
+
+			Playback();
 		}
 
 		private void RecordHotkey_Pressed()
 		{
 			m_isRecording = !m_isRecording;
-			if (!m_isRecording)
+			if (m_isRecording)
+			{
+				ScriptTextBox.Clear();
+			}
+			else
 			{
 				m_lastEventTime = null;
 			}

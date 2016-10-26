@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace NMouseClicker
 {
@@ -9,10 +7,12 @@ namespace NMouseClicker
 	{
 		public static void LClick(int x, int y)
 		{
-			Cursor.Position = new Point(x, y);
-			mouse_event(MouseEventFlags.LeftDown, 0, 0, 0, 0);
-			mouse_event(MouseEventFlags.LeftUp, 0, 0, 0, 0);
+			SetCursorPos(x, y);
+			mouse_event(MouseEventFlags.LeftDown | MouseEventFlags.LeftUp, 0, 0, 0, 0);
 		}
+
+		[DllImport("user32.dll")]
+		private static extern bool SetCursorPos(int x, int y);
 
 		[DllImport("user32.dll")]
 		private static extern void mouse_event(MouseEventFlags dwFlags, uint dx, uint dy, uint dwData, int dwExtraInfo);

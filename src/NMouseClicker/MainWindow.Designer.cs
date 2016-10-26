@@ -28,27 +28,28 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.ScriptTextBox = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
-			// textBox1
+			// ScriptTextBox
 			// 
-			this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.ScriptTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox1.Location = new System.Drawing.Point(12, 12);
-			this.textBox1.Multiline = true;
-			this.textBox1.Name = "textBox1";
-			this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox1.Size = new System.Drawing.Size(440, 312);
-			this.textBox1.TabIndex = 0;
+			this.ScriptTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.ScriptTextBox.Location = new System.Drawing.Point(12, 12);
+			this.ScriptTextBox.Multiline = true;
+			this.ScriptTextBox.Name = "ScriptTextBox";
+			this.ScriptTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.ScriptTextBox.Size = new System.Drawing.Size(440, 312);
+			this.ScriptTextBox.TabIndex = 0;
 			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.ClientSize = new System.Drawing.Size(464, 336);
-			this.Controls.Add(this.textBox1);
+			this.Controls.Add(this.ScriptTextBox);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F);
 			this.Name = "MainWindow";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -60,7 +61,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox ScriptTextBox;
 	}
 }
 
